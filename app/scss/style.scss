@@ -1,27 +1,41 @@
 @import "reset";
 
+@font-face {
+    font-family: SpaceGrotesk;
+    src: 
+    url(/assets/iawritermonov.ttf);
+}
+
+html, body{
+    scroll-snap-type: mandatory;
+    height: 100%;
+}
+
 body {
-    background-color: #ebe2d8;
+    font-family: SpaceGrotesk, arial;
+    background-color: #000;
+    color: #fff;
+    line-height: 1.2;
+    font-size: 4vmax;
 }
+section{
+    padding: 64px;
+    height: 100vh;
+    background-size: 60vmax, auto;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 
-/* Canvas centered */
-.p5Canvas {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-div.actions {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-
-    display: flex;
-    align-items: center;
-}
-
-input {
-    width: 100px;
-    margin-left: 5px;
+    scroll-snap-align: start;
+    &.image1 {
+        background-image: url(/assets/image1.jpg);
+    }
+    &.image2 {
+        background-image: url(/assets/image2.jpg);
+        color:#000;
+        background-color:#fff;
+    }
+    &.image3 {
+        background-image: url(/assets/image3.jpg);
+    }
 }

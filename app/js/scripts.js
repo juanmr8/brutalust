@@ -1,70 +1,47 @@
-let font
-let grafico
-
-const waveInput = document.querySelector('input.wave');
-const distortionXInput = document.querySelector('input.distortionX');
-const distortionYInput = document.querySelector('input.distortionY');
-const line1Input = document.querySelector('input.line1');
-const line2Input = document.querySelector('input.line2');
-
-function preload () {
-    font = loadFont("assets/spacegrotesk-medium.otf")
-}
-
-function setup() {
-    createCanvas(1200, 600)
 
 
-    createCopy()
-}
+const headerTags = document.querySelectorAll("h1, h2")
 
-function draw(){
-    background("#ebe2d8")
+const runRandom = etiqueta => {
 
-    const tileSize = 10
+    const originalContent = etiqueta.dataset.original
+    let newContent = ""
+    let num = 0
+    const randomList = "abcdefghijlmnopqrstuvwxyz._$∂∫œå∫ƒ©√ß™†".split("")
 
-    for (let x = 0; x < 120; x = x + 1) {
-        for(let y = 0; y < 60; y = y + 1) {
-
-            const wave = waveInput.value
-
-            const distortionX = sin(frameCount * wave + x * 0.5 + y * 0.1) * distortionXInput.value
-            const distortionY = sin(frameCount * wave + x * 0.5 + y * 1) * distortionYInput.value
-
-            const sx = x * tileSize + distortionX
-            const sy = y * tileSize + distortionY
-            const sw = tileSize
-            const sh = tileSize
-
-            const dx = x * tileSize
-            const dy = y * tileSize
-            const dw = tileSize
-            const dh = tileSize
-
-            image(grafico, dx, dy, dw, dh, sx, sy, sw, sh)
-
+    const addInterval = setInterval(() => {
+        num = num + 1
+        //the substring runs every 100ms adding "num" or a number or character
+        //to the sentence using the let num statement
+        newContent = originalContent.substring(0, num)
+        if (originalContent == etiqueta.innerHTML) {
+            clearInterval(addInterval)
+            clearInterval(randomInterval)
         }
-    }
+    }, 100)
+    const randomInterval = setInterval(() => {
+        etiqueta.innerHTML = newContent
 
-} 
+        for (let i = newContent.length; i < originalContent.length; i = i + 1) {
+            etiqueta.innerHTML = etiqueta.innerHTML + randomList[Math.floor(Math.random() * randomList.length)]
+        }
 
-function createCopy () {
-    
-    grafico = createGraphics(1200,600)
+    }, 50)
 
-    const text = line1Input.value + "\n" + line2Input.value
-
-    grafico.fill("#ff0000")
-    grafico.textSize(200)
-    grafico.textAlign(CENTER, CENTER)
-    grafico.textLeading(200)
-    grafico.textFont(font)
-    grafico.text(text, 600, 300)
 }
 
-line1Input.addEventListener("input", function (){
-    createCopy()
-}) 
-line2Input.addEventListener("input", function (){
-    createCopy()
-}) 
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.intersectionRatio > 0.5) {
+            runRandom(entry.target)
+        }
+    })
+}, {
+    threshold: [0, 0.5, 1]
+})
+
+
+headerTags.forEach(etiqueta => {
+    etiqueta.dataset.original = etiqueta.innerHTML
+    observer.observe(etiqueta)
+})
